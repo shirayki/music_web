@@ -439,10 +439,10 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
 const title = process.env.VUE_APP_TITLE || '音乐播放';
-const music_api = process.env.MUSIC_API || '';
-const music_lyric_api = process.env.MUSIC_LYRIC_API || '';
-const music_list_api = process.env.MUSIC_LIST_API || '';
-const icon = process.env.MUSIC_ICON_LINK || '/vite.svg';
+const music_api = process.env.VUE_APP_MUSIC_API || '';
+const music_lyric_api = process.env.VUE_APP_MUSIC_LYRIC_API || '';
+const music_list_api = process.env.VUE_APP_MUSIC_LIST_API || '';
+const icon = process.env.VUE_APP_MUSIC_ICON_LINK || '/vite.svg';
 
 const showPlaylist = ref(false);
 const isSearchFocused = ref(false);
