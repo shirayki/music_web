@@ -438,11 +438,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
-const title = process.env.VITE_APP_TITLE || '音乐播放';
-const music_api = process.env.VITE_APP_MUSIC_API || '';
-const music_lyric_api = process.env.VITE_APP_MUSIC_LYRIC_API || '';
-const music_list_api = process.env.VITE_APP_MUSIC_LIST_API || '';
-const icon = process.env.VITE_APP_MUSIC_ICON_LINK || '/vite.svg';
+const title = import.meta.env.VITE_APP_TITLE || '音乐播放';
+const music_api = import.meta.env.VITE_APP_MUSIC_API || '';
+const music_lyric_api = import.meta.env.VITE_APP_MUSIC_LYRIC_API || '';
+const music_list_api = import.meta.env.VITE_APP_MUSIC_LIST_API || '';
+const icon = import.meta.env.VITE_APP_MUSIC_ICON_LINK || '/vite.svg';
 
 const showPlaylist = ref(false);
 const isSearchFocused = ref(false);
@@ -537,7 +537,7 @@ const soaring = async () => {
 // 每日热曲
 const hot = async () => {
   try {
-    const response = await fetch(`${music_lyric_api}/lyric/fetch_music_hot`);
+    const response = await fetch(`${music_list_api}/lyric/fetch_music_hot`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -549,7 +549,7 @@ const hot = async () => {
 
 const newSongs = async () => {
   try {
-    const response = await fetch(`${music_lyric_api}/lyric/fetch_music_newSongs`);
+    const response = await fetch(`${music_list_api}/lyric/fetch_music_newSongs`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -561,7 +561,7 @@ const newSongs = async () => {
 
 const popular = async () => {
   try {
-    const response = await fetch(`${music_lyric_api}/lyric/fetch_music_popular`);
+    const response = await fetch(`${music_list_api}/lyric/fetch_music_popular`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
