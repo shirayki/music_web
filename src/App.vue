@@ -439,6 +439,10 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
 const title = process.env.VUE_APP_TITLE || '音乐播放';
+const music_api = process.env.MUSIC_API || '';
+const music_lyric_api = process.env.MUSIC_LYRIC_API || '';
+const music_list_api = process.env.MUSIC_LIST_API || '';
+const icon = process.env.MUSIC_ICON_LINK || '/vite.svg';
 
 const showPlaylist = ref(false);
 const isSearchFocused = ref(false);
@@ -468,19 +472,6 @@ const isDetail = ref(false)
 // 当前播放的歌词索引
 const currentLyricIndex = ref(0)
 const lyricsContainer = ref(null)
-
-// 每日热曲
-const hotMusic = async () => {
-  try {
-    const response = await fetch(`https://music.bocchi2b.top/lyric/fetch_music`);
-    const data = await response.json();
-    searchResults.value = data.data || [];
-
-  } catch (error) {
-    console.error('加载每日热曲失败:', error);
-    // showToastMessage('搜索音乐失败');
-  }
-};
 
 // 下载相关的状态
 const showDownloadProgress = ref(false);
@@ -533,7 +524,7 @@ const selectedRank = ref('soaring')
 // 定义各榜单的处理函数
 const soaring = async () => {
   try {
-    const response = await fetch(`https://music.bocchi2b.top/lyric/fetch_music_soaring`);
+    const response = await fetch(`${music_list_api}/lyric/fetch_music_soaring`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -546,7 +537,7 @@ const soaring = async () => {
 // 每日热曲
 const hot = async () => {
   try {
-    const response = await fetch(`https://music.bocchi2b.top/lyric/fetch_music_hot`);
+    const response = await fetch(`${music_lyric_api}/lyric/fetch_music_hot`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -558,7 +549,7 @@ const hot = async () => {
 
 const newSongs = async () => {
   try {
-    const response = await fetch(`https://music.bocchi2b.top/lyric/fetch_music_newSongs`);
+    const response = await fetch(`${music_lyric_api}/lyric/fetch_music_newSongs`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -570,7 +561,7 @@ const newSongs = async () => {
 
 const popular = async () => {
   try {
-    const response = await fetch(`https://music.bocchi2b.top/lyric/fetch_music_popular`);
+    const response = await fetch(`${music_lyric_api}/lyric/fetch_music_popular`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -599,6 +590,14 @@ const handleRankSelect = (rank) => {
       break
   }
 }
+
+let link = document.querySelector("link[rel~='icon']");
+if (!link) {
+  link = document.createElement('link');
+  link.rel = 'icon';
+  document.head.appendChild(link);
+}
+link.href = icon;
 
 const ensureHttps = (url) => {
   if (!url) return url;
@@ -694,7 +693,7 @@ const downloadSong = async (song) => {
     const selectedQualityValue = selectedQuality.value;
 
     // 获取下载链接
-    const response = await fetch(`https://api.lolimi.cn/API/${link}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
+    const response = await fetch(`${music_api}/API/${link}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
     if (!response.ok) {
       console.error(`获取下载链接失败: ${response.status}`);
     }
@@ -785,7 +784,7 @@ const downloadPlaylist = async () => {
         const selectedQualityValue = selectedQuality.value;
 
         // 获取下载链接
-        const response = await fetch(`https://api.lolimi.cn/API/${link}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
+        const response = await fetch(`${music_api}/API/${link}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
         if (!response.ok) {
           console.error(`获取下载链接失败: ${response.status}`);
           continue;
@@ -901,7 +900,7 @@ onMounted(() => {
     }
   });
 
-  soaring()    
+  soaring()
 
   // 从本地存储加载播放列表
   const savedPlaylist = localStorage.getItem('playlist');
@@ -942,7 +941,7 @@ const searchMusic = async () => {
   try {
     const selectedSourceValue = selectedSource.value;
 
-    const response = await fetch(`https://api.lolimi.cn/API/${selectedSourceValue}=${encodeURIComponent(searchQuery.value)}`);
+    const response = await fetch(`${music_api}/API/${selectedSourceValue}=${encodeURIComponent(searchQuery.value)}`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -1012,9 +1011,9 @@ const playSong = async (song) => {
   try {
     // 获取用户选择的音质
     const selectedQualityValue = selectedQuality.value;
-    const response = await fetch(`https://api.lolimi.cn/API/${song.muLink}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
+    const response = await fetch(`${music_api}/API/${song.muLink}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
     const data = await response.json();
-    const lyrics = await fetch(`https://music.bocchi2b.top/lyric/get_lyrics?title=${encodeURIComponent(song.song)}&artist=${encodeURIComponent(song.singer)}&mid=${encodeURIComponent(song.mid)}`);
+    const lyrics = await fetch(`${music_lyric_api}/get_lyrics?title=${encodeURIComponent(song.song)}&artist=${encodeURIComponent(song.singer)}&mid=${encodeURIComponent(song.mid)}`);
     const lyricsData = await lyrics.json();
     if (data.data?.url) {
       song.lyrics = lyricsData?.lyric || [{
@@ -1096,8 +1095,8 @@ const togglePlay = () => {
   isPlaying.value = !isPlaying.value;
 };
 
-const toggleDetail = () =>{
-  isDetail.value =!isDetail.value
+const toggleDetail = () => {
+  isDetail.value = !isDetail.value
 }
 
 const nextSong = () => {
@@ -1106,7 +1105,7 @@ const nextSong = () => {
   const currentIndex = playlist.value.findIndex(song => song.id === currentSong.value?.id);
   let nextIndex;
 
-    if (isShuffleMode.value && playlist.value.length > 1) {
+  if (isShuffleMode.value && playlist.value.length > 1) {
     let newIndex;
     do {
       newIndex = Math.floor(Math.random() * playlist.value.length);
