@@ -444,6 +444,7 @@ const music_lyric_api = import.meta.env.VITE_APP_MUSIC_LYRIC_API || '';
 const music_list_api = import.meta.env.VITE_APP_MUSIC_LIST_API || '';
 const icon = import.meta.env.VITE_APP_MUSIC_ICON_LINK || '/vite.svg';
 
+
 const showPlaylist = ref(false);
 const isSearchFocused = ref(false);
 const isDarkMode = ref(true);
@@ -591,13 +592,9 @@ const handleRankSelect = (rank) => {
   }
 }
 
-let link = document.querySelector("link[rel~='icon']");
-if (!link) {
-  link = document.createElement('link');
-  link.rel = 'icon';
-  document.head.appendChild(link);
-}
-link.href = icon;
+
+
+
 
 const ensureHttps = (url) => {
   if (!url) return url;
@@ -878,6 +875,8 @@ const toggleTheme = () => {
 onMounted(() => {
 
   document.title = title;
+
+  document.querySelector("link[rel~='icon']").href = icon;
 
   audio.value = new Audio();
   audio.value.volume = volume.value;
