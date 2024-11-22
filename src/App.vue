@@ -438,6 +438,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
+const title = process.env.VUE_APP_TITLE || '音乐播放';
+
 const showPlaylist = ref(false);
 const isSearchFocused = ref(false);
 const isDarkMode = ref(true);
@@ -875,6 +877,9 @@ const toggleTheme = () => {
 
 // Audio Setup
 onMounted(() => {
+
+  document.title = title;
+
   audio.value = new Audio();
   audio.value.volume = volume.value;
 
