@@ -440,7 +440,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
 const QQList = ref(false)
 
-QQList.value = import.meta.env.VITE_APP_QQList || 'false';
+QQList.value = import.meta.env.VITE_APP_QQList || false;
 
 const title = import.meta.env.VITE_APP_TITLE || '音乐播放';
 const music_api = import.meta.env.VITE_APP_MUSIC_API || '';
