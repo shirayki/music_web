@@ -138,7 +138,7 @@
           </div>
         </div>
         <!-- 新增：排行榜导航 -->
-        <div class="mt-4 flex justify-center space-x-2 md:space-x-4">
+        <div v-if="QQList" class="mt-4 flex justify-center space-x-2 md:space-x-4">
           <button v-for="rank in rankOptions" :key="rank.value" @click="handleRankSelect(rank.value)" :class="[
             'px-4 py-2 rounded-lg transition-all duration-300 text-sm md:text-base',
             selectedRank === rank.value
@@ -438,6 +438,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 
+const QQList = ref(false)
+
+QQList.value = import.meta.env.VITE_APP_QQList || 'false';
+
 const title = import.meta.env.VITE_APP_TITLE || '音乐播放';
 const music_api = import.meta.env.VITE_APP_MUSIC_API || '';
 const music_lyric_api = import.meta.env.VITE_APP_MUSIC_LYRIC_API || '';
@@ -448,6 +452,7 @@ const icon = import.meta.env.VITE_APP_MUSIC_ICON_LINK || '/vite.svg';
 const showPlaylist = ref(false);
 const isSearchFocused = ref(false);
 const isDarkMode = ref(true);
+
 
 // State
 const searchQuery = ref('');
