@@ -511,7 +511,13 @@ const selectedSource = ref(musicSources[0].value);
 watch(selectedSource, (newSource) => {
 
   searchResults.value = []; // 注意这里使用 .value
-  handleRankSelect(selectedRank.value)
+  if(QQList){
+    handleRankSelect(selectedRank.value)
+  }
+  else{
+    searchResults.value =[]
+  }
+  
 
   showToastMessage(`已切换到${newSource.includes('qqdg') ? 'QQ音乐' : '网易云音乐'}`);
 });
