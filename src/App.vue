@@ -511,7 +511,7 @@ const selectedSource = ref(musicSources[0].value);
 watch(selectedSource, (newSource) => {
 
   searchResults.value = []; // 注意这里使用 .value
-  if(QQList){
+  if(QQList.value){
     handleRankSelect(selectedRank.value)
   }
   else{
