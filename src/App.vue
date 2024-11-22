@@ -536,7 +536,7 @@ const selectedRank = ref('soaring')
 // 定义各榜单的处理函数
 const soaring = async () => {
   try {
-    const response = await fetch(`${music_list_api}/lyric/fetch_music_soaring`);
+    const response = await fetch(`${music_list_api}/fetch_music_soaring`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -549,7 +549,7 @@ const soaring = async () => {
 // 每日热曲
 const hot = async () => {
   try {
-    const response = await fetch(`${music_list_api}/lyric/fetch_music_hot`);
+    const response = await fetch(`${music_list_api}/fetch_music_hot`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -561,7 +561,7 @@ const hot = async () => {
 
 const newSongs = async () => {
   try {
-    const response = await fetch(`${music_list_api}/lyric/fetch_music_newSongs`);
+    const response = await fetch(`${music_list_api}/fetch_music_newSongs`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -573,7 +573,7 @@ const newSongs = async () => {
 
 const popular = async () => {
   try {
-    const response = await fetch(`${music_list_api}/lyric/fetch_music_popular`);
+    const response = await fetch(`${music_list_api}/fetch_music_popular`);
     const data = await response.json();
     searchResults.value = data.data || [];
 
@@ -1023,7 +1023,7 @@ const playSong = async (song) => {
     const selectedQualityValue = selectedQuality.value;
     const response = await fetch(`${music_api}/API/${song.muLink}=${encodeURIComponent(song.muName)}&n=${encodeURIComponent(song.muId)}&q=${encodeURIComponent(selectedQualityValue)}&mid=${song.mid}`);
     const data = await response.json();
-    const lyrics = await fetch(`${music_lyric_api}/get_lyrics?title=${encodeURIComponent(song.song)}&artist=${encodeURIComponent(song.singer)}&mid=${encodeURIComponent(song.mid)}`);
+    const lyrics = await fetch(`${music_lyric_api}/get_lyrics?mid=${encodeURIComponent(song.mid)}`);
     const lyricsData = await lyrics.json();
     if (data.data?.url) {
       song.lyrics = lyricsData?.lyric || [{
